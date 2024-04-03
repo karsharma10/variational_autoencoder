@@ -1,4 +1,5 @@
 from tensorflow.keras import Model
+from tensorflow.keras.layers import Input
 
 class Autoencoder:
     '''
@@ -30,6 +31,21 @@ class Autoencoder:
         conv_layers = self._add_conv_layers(encoder_input)
         bottle_neck = self._add_bottleneck(conv_layers) #return the whole graph of layers
         self.encoder = Model(encoder_input, bottle_neck, name = "encoder") #create a keras model pass in the input layer and output
+
+    def _add_encoder_input(self):
+        return Input(shape = self.input_shape, name = "encoder_input")
+    
+    def _add_conv_layers(self, encoder_input):
+        """
+        Creates all conlutional blocks in encoder.
+        """
+        x = encoder_input
+        for layer_index in range(self._num_conv_layers):
+            x = self._add_conv_layer(layer_index, x)
         
+        return x
 
-
+    def _add_conv_layer(self, layer_index, x):
+        """
+        adds a convolution block to a graph of layers, consisting of conv 2d  + ReLu + batch_normalization layer
+        """
