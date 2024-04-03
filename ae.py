@@ -1,6 +1,7 @@
 from tensorflow.keras import Model
-from tensorflow.keras.layers import Input, Conv2D, ReLU, BatchNormalization, Flatten, Dense
+from tensorflow.keras.layers import Input, Conv2D, ReLU, BatchNormalization, Flatten, Dense, Reshape, Conv2DTranspose
 from tensorflow.keras import backend as K
+import numpy as np
 
 class Autoencoder:
     '''
@@ -50,6 +51,41 @@ class Autoencoder:
 
     def _add_encoder_input(self):
         return Input(shape = self.input_shape, name = "encoder_input")
+    
+    def _add_dense_layer(self, decoder_input):
+        num_neurons = np.prod(self._shape_before_bottleneck)
+        dense_layer = Dense(num_neurons, name="decoder_dense")(decoder_input)
+        return dense_layer
+    
+    def _add_reshape_layer(self, dense_layer):
+        reshape_layer = Reshape(self._shape_before_bottleneck)(dense_layer)
+        return reshape_layer
+    
+    def _add_conv_transpose_layers(self, x):
+        '''
+        Add conv tranpose blocks. Loop through all the conv layers in reverse order and stop at the first layer.
+        '''
+
+        for layer_index in reversed(range(1,self._num_conv_layers)):
+            x = self._add_conv_transpose_layer(layer_index,x)
+
+        return x
+    
+    def _add_conv_transpose_layer(self,layer_index,x):
+        layer_num = self._num_conv_layers - layer_index
+        conv_tranpose_layer = Conv2DTranspose(
+            filters = self.conv_filters[layer_index],
+            kernel_size = self.conv_kernels[layer_index],
+            strides = self.conv_strides[layer_index],
+            padding = "same",
+            name = f"decoder_conv_tranpose_layer{layer_num}"
+        )
+
+        x = conv_tranpose_layer(x)
+        x = ReLU(name = f"decoder_relu{layer_num}")(x)
+        x = BatchNormalization(name = f"decoder_bn_{layer_num}")(x)
+
+        return x
     
     def _add_conv_layers(self, encoder_input):
         """
