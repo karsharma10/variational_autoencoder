@@ -1,2 +1,2 @@
-# variational_autoencoder
-Constructing Variational Autoencoder
+# Variational Autoencoder
+Constructing Variational Autoencoder.
