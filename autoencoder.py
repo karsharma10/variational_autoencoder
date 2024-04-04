@@ -1,6 +1,8 @@
 from tensorflow.keras import Model
 from tensorflow.keras.layers import Input, Conv2D, ReLU, BatchNormalization, Flatten, Dense, Reshape, Conv2DTranspose, Activation
 from tensorflow.keras import backend as K
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.losses import MeanSquaredError
 import numpy as np
 
 class Autoencoder:
@@ -29,6 +31,14 @@ class Autoencoder:
         self.encoder.summary()
         self.decoder.summary()
         self.model.summary()
+
+    def compile(self, learning_rate=0.0001): #compile keras model
+        optimizer = Adam(learning_rate=learning_rate)
+        mse_loss = MeanSquaredError()
+        self.model.compile(optimizer=optimizer,loss=mse_loss)
+
+    def train(self, x_train, batch_size, num_epochs):
+        self.model.fit(x_train,x_train, batch_size= batch_size, epochs = num_epochs, shuffle = True) #essentially we want the input and output to be xtrain, and data will be shufled before training.
 
 
     def _build(self):
