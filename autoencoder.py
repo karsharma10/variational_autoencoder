@@ -1,5 +1,5 @@
 from tensorflow.keras import Model
-from tensorflow.keras.layers import Input, Conv2D, ReLU, BatchNormalization, Flatten, Dense, Reshape, Conv2DTranspose
+from tensorflow.keras.layers import Input, Conv2D, ReLU, BatchNormalization, Flatten, Dense, Reshape, Conv2DTranspose, Activation
 from tensorflow.keras import backend as K
 import numpy as np
 
@@ -26,11 +26,13 @@ class Autoencoder:
     
     def summary(self):
         self.encoder.summary()
+        self.decoder.summary()
+
 
     def _build(self):
         self._build_encoder()
         self._build_decoder()
-        self._build_autoencoder()
+        # self._build_autoencoder()
     
     def _build_decoder(self):
         decoder_input = self._add_decoder_input()
@@ -86,7 +88,21 @@ class Autoencoder:
         x = BatchNormalization(name = f"decoder_bn_{layer_num}")(x)
 
         return x
-    
+
+    def _add_decoder_output(self, x):
+        conv_transpose_layer = Conv2DTranspose(
+            filters = 1,
+            kernel_size = self.conv_kernels[0],
+            strides = self.conv_strides[0],
+            padding = "same",
+            name = f"decoder_conv_tranpose_layer{self._num_conv_layers}"
+        )
+
+        x = conv_transpose_layer(x)
+
+        output_layer = Activation("sigmoid", name = "sigmoid_layer")(x)
+        return output_layer
+
     def _add_conv_layers(self, encoder_input):
         """
         Creates all conlutional blocks in encoder.
