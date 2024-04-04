@@ -3,6 +3,12 @@ In this project, we will be Constructing a Variational Autoencoder, first by con
 
 
 ## Autoencoder:
+To see the code of the vanila autoencoder:
+
+```
+cd vanila_autoencoder/
+```
+
 Below is a representation of randomly selecting images from the MNSIT dataset of handwritten digits and using the autoencoder to reconstruct the image using the encoder to put the image into latent space and then using the decoder to take the latent representation and put it into the input image form:
 <img width="1480" alt="Screenshot 2024-04-04 at 11 40 07 AM" src="https://github.com/karsharma10/variational_autoencoder/assets/64170090/99a501ba-d224-4f1f-9b30-3809766b882e">
 
