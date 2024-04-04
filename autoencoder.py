@@ -21,18 +21,25 @@ class Autoencoder:
 
         self._num_conv_layers = len(conv_filters) #number of convolution filters
         self._shape_before_bottleneck = None
+        self._model_input = None
 
         self._build() #will build encoder, decoder, autoencoder
     
     def summary(self):
         self.encoder.summary()
         self.decoder.summary()
+        self.model.summary()
 
 
     def _build(self):
         self._build_encoder()
         self._build_decoder()
-        # self._build_autoencoder()
+        self._build_autoencoder()
+    
+    def _build_autoencoder(self):
+        model_input = self._model_input
+        mode_output = self.decoder(self.encoder(model_input)) #output of the whole autoencoder
+        self.model = Model(model_input, mode_output, name="autoencoder")
     
     def _build_decoder(self):
         decoder_input = self._add_decoder_input()
@@ -49,6 +56,7 @@ class Autoencoder:
         encoder_input = self._add_encoder_input()
         conv_layers = self._add_conv_layers(encoder_input)
         bottle_neck = self._add_bottleneck(conv_layers) #return the whole graph of layers
+        self._model_input = encoder_input
         self.encoder = Model(encoder_input, bottle_neck, name = "encoder") #create a keras model pass in the input layer and output
 
     def _add_encoder_input(self):
