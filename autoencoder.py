@@ -55,6 +55,21 @@ class Autoencoder:
         save_path = os.path.join(save_folder, "weights.h5") #h5 is keras format for storing weights
         self.model.save_weights(save_path)
 
+    def load_weights(self, weights_path):
+        self.model.load_weights(weights_path)
+
+    @classmethod
+    def load(cls, save_folder="."):
+        parameters_path = os.path.join(save_folder, "parameters.pkl")
+        weights_path = os.path.join(save_folder, "weights.h5")
+
+        with open(parameters_path, "rb") as f:
+            parameters = pickle.load(f)
+
+        autoencoder = Autoencoder(*parameters)
+        autoencoder.load_weights(weights_path)
+
+        return autoencoder
 
     def summary(self):
         self.encoder.summary()
