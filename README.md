@@ -19,3 +19,9 @@ Below is the representation of the latent representation of the images:
 A problem that is known from this is that the plot isn't symmetrical around the origin, which means some labels are represented over small areas, whereas others are over large areas. There are also gaps between the colored points (number of specific digits) so some generated images will be poor.
 
 Thus, now that we understand why using a vanila autoencoder is not the best to generate data we will push towards a variation autoencoder to generate images instead of using a vanila autoencoder.
+
+## Variational Autoencoder:
+
+Now here is the variational autoencoder latent space (right now the latent dimensions are left at 2 which can be increased for more accurate digit representation):
+<img width="857" alt="Screenshot 2024-04-05 at 9 58 25 AM" src="https://github.com/karsharma10/variational_autoencoder/assets/64170090/b52896e3-a491-4666-b99b-35a4e51f0354">
+Now we can see there is a much smaller distribution of all the points, and that the points are more or less centered around zero, which allows us to sample any point in the latent space, expecting the decoder to create a well-formed image. 
