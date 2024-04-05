@@ -1,12 +1,13 @@
+import os
+import pickle
+
 from tensorflow.keras import Model
-from tensorflow.keras.layers import Input, Conv2D, ReLU, BatchNormalization, Flatten, Dense, Reshape, Conv2DTranspose, Activation, Lambda
+from tensorflow.keras.layers import Input, Conv2D, ReLU, BatchNormalization, \
+    Flatten, Dense, Reshape, Conv2DTranspose, Activation, Lambda
 from tensorflow.keras import backend as K
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.losses import MeanSquaredError
-import os
-import pickle
 import numpy as np
-
 import tensorflow as tf
 
 tf.compat.v1.disable_eager_execution()
@@ -106,7 +107,9 @@ class VAE:
     def compile(self, learning_rate=0.0001): #compile keras model
         optimizer = Adam(learning_rate=learning_rate)
         
-        self.model.compile(optimizer=optimizer,loss=self._calculate_combined_loss, metrics=[self._calculate_reconstruction_loss, self._calculate_kl_loss])
+        self.model.compile(optimizer=optimizer,
+                           loss=self._calculate_combined_loss)
+
 
     def train(self, x_train, batch_size, num_epochs):
         self.model.fit(x_train,x_train, batch_size= batch_size, epochs = num_epochs, shuffle = True) #essentially we want the input and output to be xtrain, and data will be shufled before training.
