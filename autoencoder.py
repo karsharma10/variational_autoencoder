@@ -105,8 +105,8 @@ class VAE:
 
     def compile(self, learning_rate=0.0001): #compile keras model
         optimizer = Adam(learning_rate=learning_rate)
-        mse_loss = MeanSquaredError()
-        self.model.compile(optimizer=optimizer,loss=mse_loss)
+        
+        self.model.compile(optimizer=optimizer,loss=self._calculate_combined_loss, metrics=[self._calculate_reconstruction_loss, self._calculate_kl_loss])
 
     def train(self, x_train, batch_size, num_epochs):
         self.model.fit(x_train,x_train, batch_size= batch_size, epochs = num_epochs, shuffle = True) #essentially we want the input and output to be xtrain, and data will be shufled before training.
