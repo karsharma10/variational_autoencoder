@@ -16,7 +16,7 @@ Below is the representation of the latent representation of the images:
 
 <img width="968" alt="Screenshot 2024-04-04 at 11 40 16 AM" src="https://github.com/karsharma10/variational_autoencoder/assets/64170090/98b518f7-6f57-4768-8f8f-3217b8070d7b">
 
-A problem that is known from this is that the plot isn't symmetrical around the origin, which means some labels are represented over small areas, whereas others are over large areas. There are also gaps between the colored points (number of specific digits) so some generated images will be poor.
+A problem that is known from this is that the plot isn't symmetrical around the origin, which means some labels are represented over small areas, whereas others are over large areas. There are also gaps between the colored points (number of specific digits) so some generated images will be poor because the model will have never seen that specific point before.
 
 Thus, now that we understand why using a vanila autoencoder is not the best to generate data we will push towards a variation autoencoder to generate images instead of using a vanila autoencoder.
 
