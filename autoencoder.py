@@ -22,6 +22,7 @@ class VAE:
         self.conv_kernels = conv_kernels 
         self.conv_strides = conv_strides
         self.latent_space_dim = latent_space_dim
+        self.reconstruction_loss_weight = 1000
 
         self.encoder = None #tensor flow encoder
         self.decoder = None #tensor flow decoder
@@ -79,6 +80,13 @@ class VAE:
         autoencoder.load_weights(weights_path)
 
         return autoencoder
+    
+    def _calculate_combined_loss(self,  y_target, y_predicted):
+        reconstruction_loss = self._calculate_reconstruction_loss(y_target,y_predicted)
+        kl_loss = self._calculate_kl_loss(y_target, y_predicted)
+
+        combined_loss = self.reconstruction_loss_weight*reconstruction_loss + kl_loss
+        return combined_loss
     
     def _calculate_reconstruction_loss(self, y_target, y_predicted):
         error = y_target - y_predicted
